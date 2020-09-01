@@ -11,24 +11,26 @@ function App() {
     api.get('/repositories').then(response => {
       setRepositories(response.data);
     });
-  }, [repositories]);
+  }, []);
 
   async function handleAddRepository() {
 
     const response = await api.post('/repositories', {
-      title: "Desafio React",
+      title: "Desafio ReactJS",
       url: "https://github.com/michaellothbrook/desafio-conceitos-reactjs",
-      techs: [
-        "ReactJs",
-        "Nodejs"
-      ],
+      techs: ["React", "Node.js"],
     });
     const repositorie = response.data;
     setRepositories([...repositories, repositorie]);
   }
 
   async function handleRemoveRepository(id) {
-    await api.delete(`repositories/${id}`);
+    await api.delete(`repositories/${id}`).then((response) => {
+      api.get('/repositories').then(response => {
+        setRepositories(response.data);
+      });
+    });
+
   }
 
   return (
